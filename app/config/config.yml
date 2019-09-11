@@ -7,6 +7,8 @@ imports:
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     locale: en
+    img_directory: '%kernel.project_dir%/web/img'
+
 
 framework:
     #esi: ~
@@ -35,6 +37,8 @@ framework:
 twig:
     debug: '%kernel.debug%'
     strict_variables: '%kernel.debug%'
+    globals:
+        img_route: 'img/'
 
 # Doctrine Configuration
 doctrine:

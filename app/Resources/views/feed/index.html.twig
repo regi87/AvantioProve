@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    <h1>Feeds list</h1>
+
+        {% for feed in feeds %}
+            <div>{{ feed.title }}</div>
+            <div>
+                <img height="50%" width="50%" src="{{asset(img_route~feed.image)}}" alt="">
+            </div>
+            <div>{{ feed.body }}</div>
+            <div>{{ feed.source }}</div>
+            <div>{{ feed.publisher }}</div>
+            <div>
+                <ul>
+                    <li>
+                        <a href="{{ path('feed_show', { 'id': feed.id }) }}">show</a>
+                    </li>
+                    <li>
+                        <a href="{{ path('feed_edit', { 'id': feed.id }) }}">edit</a>
+                    </li>
+                </ul>
+                </div>
+        {% endfor %}
+ 
+    <ul>
+        <li>
+            <a href="{{ path('feed_new') }}">Create a new feed</a>
+        </li>
+    </ul>
+{% endblock %}
