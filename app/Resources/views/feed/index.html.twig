@@ -1,32 +1,31 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-
-    <h1>Feeds list</h1>
-
-        {% for feed in feeds %}
-            <div>{{ feed.title }}</div>
-            <div>
-                <img height="50%" width="50%" src="{{asset(img_route~feed.image)}}" alt="">
+    <div class="container-fluid">
+        <h1 class="mt-6">Feeds list</h1>
+        <div class="card-deck-wrapper">
+            <div class="card-deck">
+                {% for feed in feeds %}
+                    <div class="col-6 mb-3">
+                        <div class="card">
+                            <div class="card-header">
+                                <img style="height: 30vw;" class="card-img-top img-fluid" src="{{asset(img_route~feed.image)}}" alt="">
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">{{ feed.title }}</h5>
+                                <p style="display: block; text-overflow: ellipsis;  word-wrap: break-word;
+                                   overflow: hidden;  max-height: 1.6em;  line-height: 1.8em;}" class="card-text">
+                                    {{ feed.body }}
+                                </p>
+                            </div>
+                            <div class="d-flex justify-content-between p-3">
+                                <a href="{{path('feed_show',{'id':feed.id})}}" class="card-link">Show</a>
+                                <a href="{{path('feed_edit',{'id':feed.id})}}" class="card-link">Edit</a>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
             </div>
-            <div>{{ feed.body }}</div>
-            <div>{{ feed.source }}</div>
-            <div>{{ feed.publisher }}</div>
-            <div>
-                <ul>
-                    <li>
-                        <a href="{{ path('feed_show', { 'id': feed.id }) }}">show</a>
-                    </li>
-                    <li>
-                        <a href="{{ path('feed_edit', { 'id': feed.id }) }}">edit</a>
-                    </li>
-                </ul>
-                </div>
-        {% endfor %}
- 
-    <ul>
-        <li>
-            <a href="{{ path('feed_new') }}">Create a new feed</a>
-        </li>
-    </ul>
+        </div>
+    </div>
 {% endblock %}

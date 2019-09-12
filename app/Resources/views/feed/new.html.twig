@@ -1,16 +1,17 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1>Feed creation</h1>
-
-    {{ form_start(form) }}
+    <div class="container">
+        <h1>Feed creation</h1>
+        {{ form_start(form) }}
+       
         {{ form_widget(form) }}
-        <input type="submit" value="Create" />
-    {{ form_end(form) }}
-
-    <ul>
-        <li>
-            <a href="{{ path('feed_index') }}">Back to the list</a>
-        </li>
-    </ul>
+        <input type="submit" class='mt-4 btn btn-outline-success' value="Create"/>
+        {{ form_end(form) }}
+        <a style="color: black" href="{{ path('feed_index') }}">
+            <button class='mt-1 btn btn-outline-secondary'>
+                Back to the list
+            </button>
+        </a>
+    </div>
 {% endblock %}

@@ -1,48 +1,44 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1>Feed</h1>
+    <div class="container">
+        <h1>{{ feed.title }}</h1>
 
-    <table>
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ feed.id }}</td>
-            </tr>
-            <tr>
-                <th>Title</th>
-                <td>{{ feed.title }}</td>
-            </tr>
-            <tr>
-                <th>Body</th>
-                <td>{{ feed.body }}</td>
-            </tr>
-            <tr>
-                <th>Image</th>
-                <td>{{ feed.image }}</td>
-            </tr>
-            <tr>
-                <th>Source</th>
-                <td>{{ feed.source }}</td>
-            </tr>
-            <tr>
-                <th>Publisher</th>
-                <td>{{ feed.publisher }}</td>
-            </tr>
-        </tbody>
-    </table>
+        <div class="card">
+            <div class="card-header">
+                <img class="card-img-top img-fluid" src="{{asset(img_route~feed.image)}}" alt="">
+            </div>
+            <div class="card-body">
+                <p style="display: block; text-overflow: ellipsis;  word-wrap: break-word;
+                                                                                                                               overflow: hidden;  max-height: 1.6em;  line-height: 1.8em;}" class="card-text">
+                    {{ feed.body }}
+                </p>
+            </div>
+            <div class="card-footer text-muted">
+                <label>{{ feed.source }}</label><br>
+                <label>{{ feed.publisher }}</label>
+            </div>
 
-    <ul>
-        <li>
-            <a href="{{ path('feed_index') }}">Back to the list</a>
-        </li>
-        <li>
-            <a href="{{ path('feed_edit', { 'id': feed.id }) }}">Edit</a>
-        </li>
-        <li>
-            {{ form_start(delete_form) }}
-                <input type="submit" value="Delete">
-            {{ form_end(delete_form) }}
-        </li>
-    </ul>
+        </div>
+
+        <a style="color: black" href="{{ path('feed_edit', { 'id': feed.id }) }}">
+            <button class='mt-1 btn btn-outline-success'>
+                Edit
+            </button>
+        </a>
+        <br>
+
+        <a style="color: black" href="{{path('feed_delete',{'id':feed.id})}}" class="card-link">
+            <button class='mt-1 btn btn-outline-danger'>
+                Delete
+            </button>
+        </a>
+        <br>
+
+        <a style="color: black" href="{{ path('feed_index') }}">
+            <button class='mt-1 btn btn-outline-secondary'>
+                Back to the list
+            </button>
+        </a>
+    </div>
 {% endblock %}

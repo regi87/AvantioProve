@@ -6,6 +6,7 @@ use AppBundle\Entity\Feed;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\File\File;
 
 /**
  * Feed controller.
@@ -56,8 +57,6 @@ class FeedController extends Controller
                 $this->getParameter('img_directory'),
                 $file_name
             );
-
-
            
             $em->persist($feed);
             $em->flush();
@@ -104,12 +103,39 @@ class FeedController extends Controller
     public function editAction(Request $request, Feed $feed)
     {
         $deleteForm = $this->createDeleteForm($feed);
+
+        $img = $feed->getImage();
+
         $editForm = $this->createForm('AppBundle\Form\FeedType', $feed);
+
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+            
+            if(!$editForm['image']->getData())
+            {
+                $feed->setTitle($editForm['title']->getData());
+                $feed->setBody($editForm['body']->getData());
+                $feed->setImage( $img);
+                $feed->setSource($editForm['source']->getData());
+                $feed->setPublisher($editForm['publisher']->getData());
+               
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($feed);
+                $em->flush();
+            }
+            else {
 
+                $file_name = $this->generateUniqueFileName().'.'.$editForm['image']->getData()->guessExtension(); 
+                $feed->setImage($file_name);
+                
+                $editForm['image']->getData()->move(
+                    $this->getParameter('img_directory'),
+                    $file_name
+                );
+
+                $this->getDoctrine()->getManager()->flush();
+            }
             return $this->redirectToRoute('feed_edit', array('id' => $feed->getId()));
         }
 
@@ -123,20 +149,14 @@ class FeedController extends Controller
     /**
      * Deletes a feed entity.
      *
-     * @Route("/{id}", name="feed_delete")
+     * @Route("/feed_delete/{id}", name="feed_delete")
      * @Method("DELETE")
      */
     public function deleteAction(Request $request, Feed $feed)
     {
-        $form = $this->createDeleteForm($feed);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->remove($feed);
-            $em->flush();
-        }
-
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($feed);
+        $em->flush();
         return $this->redirectToRoute('feed_index');
     }
 
@@ -149,7 +169,7 @@ class FeedController extends Controller
      */
     private function createDeleteForm(Feed $feed)
     {
-        return $this->createFormBuilder()
+            return $this->createFormBuilder()
             ->setAction($this->generateUrl('feed_delete', array('id' => $feed->getId())))
             ->setMethod('DELETE')
             ->getForm()
